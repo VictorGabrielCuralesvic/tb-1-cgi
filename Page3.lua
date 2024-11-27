@@ -61,7 +61,17 @@ function scene:create(event)
     local sceneGroup = self.view
     display.setDefault("background", 210/255, 180/255, 140/255)
 
-    -- Título
+    local pageNumber = display.newText({
+        text = "3",
+        x = display.contentWidth - MARGIN,
+        y = MARGIN,
+        font = native.systemFont,
+        fontSize = 24,
+        align = "right"
+    })
+    pageNumber:setFillColor(0)
+    sceneGroup:insert(pageNumber)
+
     local title = display.newText({
         text = "George Buffon",
         x = display.contentCenterX,
@@ -71,8 +81,7 @@ function scene:create(event)
     })
     title:setFillColor(0, 0, 0)
     sceneGroup:insert(title)
-
-    -- Descrição
+    
     local description = display.newText({
         text = "Georges-Louis Leclerc, conhecido como Conde de Buffon, foi um dos primeiros naturalistas a questionar a ideia de que as espécies eram imutáveis, uma noção dominante em sua época. Em sua obra Histoire Naturelle (1749), Buffon sugeriu que as espécies poderiam mudar ao longo do tempo e que a Terra era muito mais antiga do que se pensava (ele estimou a idade da Terra em cerca de 75.000 anos, o que era uma grande expansão para a época).\n\nBuffon propôs que:\n- As espécies poderiam ter um 'ancestral comum' e se modificariam em resposta ao ambiente, embora ele nunca tenha desenvolvido uma teoria evolutiva completamente articulada.\n- Ele observou que diferentes regiões geográficas com condições similares abrigavam diferentes espécies, sugerindo que elas poderiam ter mudado ou se adaptado ao ambiente local.\n\nAbaixo, clique no botão para escutar um exemplo completo de como isso acontece.",
         x = display.contentCenterX,
@@ -86,7 +95,7 @@ function scene:create(event)
     sceneGroup:insert(description)
 
     -- Botão de tocar áudio
-    audioButton = display.newImage(sceneGroup, "assets/botao-play.png")
+    audioButton = display.newImage(sceneGroup, "assets/alto-falante.png")
     audioButton.width = 80
     audioButton.height = 80
     audioButton.x = display.contentCenterX
@@ -94,7 +103,7 @@ function scene:create(event)
     audioButton:addEventListener("tap", playAudio)
 
     -- Botão de parar áudio
-    stopButton = display.newImage(sceneGroup, "assets/botao-de-pausa-de-video.png")
+    stopButton = display.newImage(sceneGroup, "assets/ferramenta-de-audio-com-alto-falante.png")
     stopButton.width = 80
     stopButton.height = 80
     stopButton.x = display.contentCenterX

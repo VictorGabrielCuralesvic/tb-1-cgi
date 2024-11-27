@@ -3,11 +3,43 @@ local scene = composer.newScene()
 
 local MARGIN = 50
 
+local audioHandle
+local audioButton, stopButton
+
+local function playAudio()
+    if not audioHandle then
+        audioHandle = audio.loadStream("assets/pagina4.mp3")
+        audio.play(audioHandle, { loops = -1 })
+    end
+    audioButton.isVisible = false
+    stopButton.isVisible = true
+end
+
+local function stopAudio()
+    if audioHandle then
+        audio.stop()
+        audio.dispose(audioHandle)
+        audioHandle = nil
+    end
+    audioButton.isVisible = true
+    stopButton.isVisible = false
+end
+
 function scene:create(event)
     local sceneGroup = self.view
     display.setDefault("background", 210/255, 180/255, 140/255)
 
-    -- Título
+    local pageNumber = display.newText({
+        text = "5",
+        x = display.contentWidth - MARGIN,
+        y = MARGIN,
+        font = native.systemFont,
+        fontSize = 24,
+        align = "right"
+    })
+    pageNumber:setFillColor(0)
+    sceneGroup:insert(pageNumber)
+
     local title = display.newText({
         text = "Ideia Evolucionista de Darwin e a Seleção Natural",
         x = display.contentCenterX,
@@ -18,7 +50,6 @@ function scene:create(event)
     title:setFillColor(0, 0, 0)
     sceneGroup:insert(title)
 
-    -- Descrição
     local description = display.newText({
         text = "      Charles Darwin é o nome mais associado à teoria da evolução. Em 1859, ele publicou A Origem das Espécies, onde propôs a ideia de seleção natural como o mecanismo pelo qual a evolução ocorre. Darwin observou que os indivíduos em uma população variam em suas características, e essas variações podem afetar suas chances de sobrevivência e reprodução. Aqueles com características vantajosas têm maior probabilidade de passar seus genes para as gerações seguintes.\n      A seleção natural é o processo pelo qual organismos com características mais vantajosas para sobreviver e se reproduzir em um determinado ambiente têm mais chances de passar essas características para a próxima geração. Esse conceito, proposto por Charles Darwin, é um dos principais mecanismos da evolução. Na natureza, os organismos variam em suas características, como tamanho, força ou até mesmo a presença de estruturas específicas, como os chifres.\n      Essas variações surgem devido a mutações genéticas e influências ambientais. Algumas dessas características dão aos indivíduos uma vantagem no ambiente em que vivem. Um exemplo clássico é o dos alces. Em disputas por dominância, alces machos com chifres grandes e robustos tinham mais chances de vencer lutas contra machos sem chifres. Isso significava que os alces com chifres conseguiam acasalar e passar seus genes adiante, enquanto os alces sem chifres perdiam essas oportunidades. Com o passar do tempo, essa seleção natural favoreceu a prevalência de alces com chifres na população.\n \n Clique no alce com chifres para simular uma disputa e entender como a seleção natural funciona!",
         x = display.contentCenterX,
@@ -95,11 +126,9 @@ function scene:create(event)
     })
 end
 
-  -- Adicionar evento de toque no alce com chifres
   alceComChifres:addEventListener("tap", colidirAlces)
 
 
-    -- Botão próximo
     local btnNext = display.newImage(sceneGroup, "assets/proximo.png")
     btnNext.width = 100
     btnNext.height = 100
@@ -109,7 +138,6 @@ end
         composer.gotoScene("Page5", { effect = "fade", time = 500 })
     end)
 
-    -- Botão anterior
     local btnPrev = display.newImage(sceneGroup, "assets/proximo.png")
     btnPrev.width = 100
     btnPrev.height = 100
@@ -119,6 +147,21 @@ end
     btnPrev:addEventListener("tap", function(event)
         composer.gotoScene("Page2", { effect = "fade", time = 500 })
     end)
+
+    audioButton = display.newImage(sceneGroup, "assets/alto-falante.png") 
+    audioButton.width = 80
+    audioButton.height = 80
+    audioButton.x = 80
+    audioButton.y = -60
+    audioButton:addEventListener("tap", playAudio)
+
+    stopButton = display.newImage(sceneGroup, "assets/ferramenta-de-audio-com-alto-falante.png")
+    stopButton.width = 80
+    stopButton.height = 80
+    stopButton.x = 80
+    stopButton.y = -60
+    stopButton.isVisible = false
+    stopButton:addEventListener("tap", stopAudio)
 end
 
 scene:addEventListener("create", scene)

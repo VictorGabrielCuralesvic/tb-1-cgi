@@ -3,12 +3,44 @@ local scene = composer.newScene()
 
 local MARGIN = 50
 
--- create()
+local audioHandle
+local audioButton, stopButton
+
+local function playAudio()
+    if not audioHandle then
+        audioHandle = audio.loadStream("assets/pagina4.mp3")
+        audio.play(audioHandle, { loops = -1 })
+    end
+    audioButton.isVisible = false
+    stopButton.isVisible = true
+end
+
+local function stopAudio()
+    if audioHandle then
+        audio.stop()
+        audio.dispose(audioHandle)
+        audioHandle = nil
+    end
+    audioButton.isVisible = true
+    stopButton.isVisible = false
+end
+
+
 function scene:create(event)
     local sceneGroup = self.view
     display.setDefault("background", 210/255, 180/255, 140/255)
 
-    -- Título
+    local pageNumber = display.newText({
+        text = "4",
+        x = display.contentWidth - MARGIN,
+        y = MARGIN,
+        font = native.systemFont,
+        fontSize = 24,
+        align = "right"
+    })
+    pageNumber:setFillColor(0)
+    sceneGroup:insert(pageNumber)
+
     local title = display.newText({
         text = "Ideia Evolucionista de Lamarck",
         x = display.contentCenterX,
@@ -32,7 +64,6 @@ function scene:create(event)
     description:setFillColor(0)
     sceneGroup:insert(description)
 
-    -- Botão próximo
     local btnNext = display.newImage(sceneGroup, "assets/proximo.png")
     btnNext.width = 100
     btnNext.height = 100
@@ -43,7 +74,6 @@ function scene:create(event)
         print("Page5")
     end)
 
-    -- Botão anterior
     local btnPrev = display.newImage(sceneGroup, "assets/proximo.png")
     btnPrev.width = 100
     btnPrev.height = 100
@@ -54,6 +84,21 @@ function scene:create(event)
         composer.gotoScene("Page2", { effect = "fade", time = 500 })
         print("Page3")
     end)
+
+    audioButton = display.newImage(sceneGroup, "assets/alto-falante.png") 
+    audioButton.width = 80
+    audioButton.height = 80
+    audioButton.x = 80
+    audioButton.y = -60
+    audioButton:addEventListener("tap", playAudio)
+
+    stopButton = display.newImage(sceneGroup, "assets/ferramenta-de-audio-com-alto-falante.png")
+    stopButton.width = 80
+    stopButton.height = 80
+    stopButton.x = 80
+    stopButton.y = -60
+    stopButton.isVisible = false
+    stopButton:addEventListener("tap", stopAudio)
 
     -- Imagens adicionais (girafa e árvore)
     --[[ local giraffe = display.newImage(sceneGroup, "assets/girafa__2_-removebg-preview.png")

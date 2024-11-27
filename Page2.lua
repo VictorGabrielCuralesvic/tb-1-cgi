@@ -25,6 +25,30 @@ local scene = composer.newScene()
         { x = 170, y = 285, page = "Page6" },
         { x = 253, y = 280, page = "Page5" }
     }
+
+    
+    local audioHandle
+    local audioButton, stopButton
+    
+    local function playAudio()
+        if not audioHandle then
+            audioHandle = audio.loadStream("assets/pagina2.mp3")
+            audio.play(audioHandle, { loops = -1 })
+        end
+        audioButton.isVisible = false
+        stopButton.isVisible = true
+    end
+    
+    local function stopAudio()
+        if audioHandle then
+            audio.stop()
+            audio.dispose(audioHandle)
+            audioHandle = nil
+        end
+        audioButton.isVisible = true
+        stopButton.isVisible = false
+    end
+    
 -- -----------------------------------------------------------------------------------
 -- Scene event functions
 -- -----------------------------------------------------------------------------------
@@ -76,6 +100,17 @@ function scene:create( event )
     -- Code here runs when the scene is first created but has not yet appeared on screen
 
     display.setDefault("background", 210/255, 180/255, 140/255)
+
+    local pageNumber = display.newText({
+        text = "2",
+        x = display.contentWidth - MARGIN,
+        y = MARGIN,
+        font = native.systemFont,
+        fontSize = 24,
+        align = "right"
+    })
+    pageNumber:setFillColor(0)
+    sceneGroup:insert(pageNumber)
 
     local title = display.newText({
         text = "Introdução à Evolução",
@@ -137,7 +172,14 @@ function scene:create( event )
         table.insert(redDots, redDot)
     end
 
-    -- Botão para retornar à capa
+    local btnNext = display.newImage(sceneGroup, "assets/proximo.png")
+    btnNext.width, btnNext.height = 100, 100
+    btnNext.x = display.contentWidth - MARGIN - 50
+    btnNext.y = display.contentHeight - MARGIN + 200
+    btnNext:addEventListener("tap", function(event)
+        composer.gotoScene("Contracapa", { effect = "fade", time = 500 })
+    end)
+
     local btnPrev = display.newImage(sceneGroup, "assets/proximo.png")
     btnPrev.width, btnPrev.height = 100, 100
     btnPrev.x = MARGIN + 50
@@ -146,6 +188,21 @@ function scene:create( event )
     btnPrev:addEventListener("tap", function(event)
         composer.gotoScene("Page1", { effect = "fade", time = 500 })
     end)
+
+    audioButton = display.newImage(sceneGroup, "assets/alto-falante.png") 
+    audioButton.width = 80
+    audioButton.height = 80
+    audioButton.x = 80
+    audioButton.y = -60
+    audioButton:addEventListener("tap", playAudio)
+
+    stopButton = display.newImage(sceneGroup, "assets/ferramenta-de-audio-com-alto-falante.png")
+    stopButton.width = 80
+    stopButton.height = 80
+    stopButton.x = 80
+    stopButton.y = -60
+    stopButton.isVisible = false
+    stopButton:addEventListener("tap", stopAudio)
 end
 
 -- show()

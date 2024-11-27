@@ -1,27 +1,34 @@
-local composer = require( "composer" )
-local Contracapa = require("Contracapa")
- 
+local composer = require("composer")
 local scene = composer.newScene()
- 
--- -----------------------------------------------------------------------------------
--- Code outside of the scene event functions below will only be executed ONCE unless
--- the scene is removed entirely (not recycled) via "composer.removeScene()"
--- -----------------------------------------------------------------------------------
- 
-    local MARGIN = 50
- 
- 
--- -----------------------------------------------------------------------------------
--- Scene event functions
--- -----------------------------------------------------------------------------------
- 
--- create()
-function scene:create( event )
- 
-    local sceneGroup = self.view
-    -- Code here runs when the scene is first created but has not yet appeared on screen
 
-    display.setDefault("background", 210/255, 180/255, 140/255)
+local audioHandle
+local audioButton, stopButton
+
+local MARGIN = 50
+
+local function playAudio()
+    if not audioHandle then
+        audioHandle = audio.loadStream("assets/capa.mp3")
+        audio.play(audioHandle, { loops = -1 })
+    end
+    audioButton.isVisible = false
+    stopButton.isVisible = true
+end
+
+local function stopAudio()
+    if audioHandle then
+        audio.stop()
+        audio.dispose(audioHandle)
+        audioHandle = nil
+    end
+    audioButton.isVisible = true
+    stopButton.isVisible = false
+end
+
+function scene:create(event)
+    local sceneGroup = self.view
+
+    display.setDefault("background", 210 / 255, 180 / 255, 140 / 255)
 
     local titulo = display.newText({
         text = "ONIS\nVOLVERE\nEVOLUTIO\nEVOLUÇÃO",
@@ -37,9 +44,9 @@ function scene:create( event )
 
     local subtitulo = display.newText({
         text = "Evidências da evolução e especiação",
-        x = display.contentCenterX, 
+        x = display.contentCenterX,
         y = titulo.y + 200,
-        font = native.systemFont, 
+        font = native.systemFont,
         fontSize = 30
     })
     sceneGroup:insert(subtitulo)
@@ -54,86 +61,40 @@ function scene:create( event )
     })
     sceneGroup:insert(autor)
 
-    local btnNext = display.newImage(sceneGroup,"assets/proximo.png")
-
+    local btnNext = display.newImage(sceneGroup, "assets/proximo.png")
     btnNext.width = 100
     btnNext.height = 100
-
     btnNext.x = MARGIN + 650
     btnNext.y = display.contentHeight - MARGIN - (-200)
-
     btnNext:addEventListener("tap", function(event)
         composer.gotoScene("Page1", { effect = "fade", time = 500 })
-        print("Page1")
     end)
 
-    local btnPrev = display.newImage(sceneGroup,"assets/proximo.png")
-
+    local btnPrev = display.newImage(sceneGroup, "assets/proximo.png")
     btnPrev.width = 100
     btnPrev.height = 100
-
     btnPrev.x = MARGIN + 50
     btnPrev.y = display.contentHeight - MARGIN - (-203)
-
     btnPrev.rotation = 180
-
     btnPrev:addEventListener("tap", function(event)
-        composer.gotoScene("Capa", { effect = "fade", time = 500})
-        print("Capa")
+        composer.gotoScene("Capa", { effect = "fade", time = 500 })
     end)
 
- 
+    audioButton = display.newImage(sceneGroup, "assets/alto-falante.png") -- Sem "local"
+    audioButton.width = 80
+    audioButton.height = 80
+    audioButton.x = 80
+    audioButton.y = 80
+    audioButton:addEventListener("tap", playAudio)
+
+    stopButton = display.newImage(sceneGroup, "assets/ferramenta-de-audio-com-alto-falante.png") -- Sem "local"
+    stopButton.width = 80
+    stopButton.height = 80
+    stopButton.x = 80
+    stopButton.y = 80
+    stopButton.isVisible = false -- Inicialmente invisível
+    stopButton:addEventListener("tap", stopAudio)
 end
- 
- 
--- show()
-function scene:show( event )
- 
-    local sceneGroup = self.view
-    local phase = event.phase
- 
-    if ( phase == "will" ) then
-        -- Code here runs when the scene is still off screen (but is about to come on screen)
- 
-    elseif ( phase == "did" ) then
-        -- Code here runs when the scene is entirely on screen
- 
-    end
-end
- 
- 
--- hide()
-function scene:hide( event )
- 
-    local sceneGroup = self.view
-    local phase = event.phase
- 
-    if ( phase == "will" ) then
-        -- Code here runs when the scene is on screen (but is about to go off screen)
- 
-    elseif ( phase == "did" ) then
-        -- Code here runs immediately after the scene goes entirely off screen
- 
-    end
-end
- 
- 
--- destroy()
-function scene:destroy( event )
- 
-    local sceneGroup = self.view
-    -- Code here runs prior to the removal of scene's view
- 
-end
- 
- 
--- -----------------------------------------------------------------------------------
--- Scene event function listeners
--- -----------------------------------------------------------------------------------
-scene:addEventListener( "create", scene )
-scene:addEventListener( "show", scene )
-scene:addEventListener( "hide", scene )
-scene:addEventListener( "destroy", scene )
--- -----------------------------------------------------------------------------------
- 
+
+scene:addEventListener("create", scene)
 return scene

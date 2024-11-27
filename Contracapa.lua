@@ -8,6 +8,27 @@ local scene = composer.newScene()
 -- -----------------------------------------------------------------------------------
  
     local MARGIN = 50
+
+    local audioButton, stopButton
+    
+    local function playAudio()
+        if not audioHandle then
+            audioHandle = audio.loadStream("assets/contracapa.mp3")
+            audio.play(audioHandle, { loops = -1 })
+        end
+        audioButton.isVisible = false
+        stopButton.isVisible = true
+    end
+    
+    local function stopAudio()
+        if audioHandle then
+            audio.stop()
+            audio.dispose(audioHandle)
+            audioHandle = nil
+        end
+        audioButton.isVisible = true
+        stopButton.isVisible = false
+    end
  
  
 -- -----------------------------------------------------------------------------------
@@ -62,7 +83,7 @@ function scene:create( event )
         fontSize = 40,
         align = "center"
     })
-    referencias:setFillColor(0.2) -- Cinza escuro
+    referencias:setFillColor(0.2)
     sceneGroup:insert(referencias)
 
     local btnNext = display.newImage(sceneGroup,"assets/proximo.png")
@@ -76,13 +97,26 @@ function scene:create( event )
     btnNext.rotation = 180
 
     btnNext:addEventListener("tap", function(event)
-        composer.gotoScene("Page5");
-        print("Page5")
+        composer.gotoScene("Capa");
+        print("Capa")
     end)
 
- 
+    audioButton = display.newImage(sceneGroup, "assets/alto-falante.png") -- Sem "local"
+    audioButton.width = 80
+    audioButton.height = 80
+    audioButton.x = 80
+    audioButton.y = 80
+    audioButton:addEventListener("tap", playAudio)
+
+    -- Botão de áudio (parar)
+    stopButton = display.newImage(sceneGroup, "assets/ferramenta-de-audio-com-alto-falante.png") -- Sem "local"
+    stopButton.width = 80
+    stopButton.height = 80
+    stopButton.x = 80
+    stopButton.y = 80
+    stopButton.isVisible = false -- Inicialmente invisível
+    stopButton:addEventListener("tap", stopAudio)
 end
- 
  
 -- show()
 function scene:show( event )
