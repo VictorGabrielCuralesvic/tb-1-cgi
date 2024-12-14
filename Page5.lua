@@ -43,7 +43,7 @@ function scene:create(event)
     local title = display.newText({
         text = "Ideia Evolucionista de Darwin e a Seleção Natural",
         x = display.contentCenterX,
-        y = 80,
+        y = 130,
         font = native.systemFontBold,
         fontSize = 30
     })
@@ -51,9 +51,9 @@ function scene:create(event)
     sceneGroup:insert(title)
 
     local description = display.newText({
-        text = "      Charles Darwin é o nome mais associado à teoria da evolução. Em 1859, ele publicou A Origem das Espécies, onde propôs a ideia de seleção natural como o mecanismo pelo qual a evolução ocorre. Darwin observou que os indivíduos em uma população variam em suas características, e essas variações podem afetar suas chances de sobrevivência e reprodução. Aqueles com características vantajosas têm maior probabilidade de passar seus genes para as gerações seguintes.\n      A seleção natural é o processo pelo qual organismos com características mais vantajosas para sobreviver e se reproduzir em um determinado ambiente têm mais chances de passar essas características para a próxima geração. Esse conceito, proposto por Charles Darwin, é um dos principais mecanismos da evolução. Na natureza, os organismos variam em suas características, como tamanho, força ou até mesmo a presença de estruturas específicas, como os chifres.\n      Essas variações surgem devido a mutações genéticas e influências ambientais. Algumas dessas características dão aos indivíduos uma vantagem no ambiente em que vivem. Um exemplo clássico é o dos alces. Em disputas por dominância, alces machos com chifres grandes e robustos tinham mais chances de vencer lutas contra machos sem chifres. Isso significava que os alces com chifres conseguiam acasalar e passar seus genes adiante, enquanto os alces sem chifres perdiam essas oportunidades. Com o passar do tempo, essa seleção natural favoreceu a prevalência de alces com chifres na população.\n \n Clique no alce com chifres para simular uma disputa e entender como a seleção natural funciona!",
+        text = " Charles Darwin é o nome mais associado à teoria da evolução. Em 1859, ele publicou A Origem das Espécies, onde propôs a ideia de seleção natural como o mecanismo pelo qual a evolução ocorre. Darwin observou que os indivíduos em uma população variam em suas características, e essas variações podem afetar suas chances de sobrevivência e reprodução. Aqueles com características vantajosas têm maior probabilidade de passar seus genes para as gerações seguintes. Na natureza, os organismos variam em suas características, como tamanho, força ou até mesmo a presença de estruturas específicas, como os chifres. Um exemplo clássico é o dos alces. Em disputas por dominância, alces machos com chifres grandes e robustos tinham mais chances de vencer lutas contra machos sem chifres. Isso significava que os alces com chifres conseguiam acasalar e passar seus genes adiante, enquanto os alces sem chifres perdiam essas oportunidades. Com o passar do tempo, essa seleção natural favoreceu a prevalência de alces com chifres na população.\n \n Toque no alce com chifre para ativar a colisão, assim simulando uma disputa e entender como a seleção natural funciona!",
         x = display.contentCenterX,
-        y = title.y + 360,
+        y = title.y + 280,
         width = display.contentWidth - 3 * MARGIN,
         font = native.systemFont,
         fontSize = 20,
@@ -129,37 +129,57 @@ end
   alceComChifres:addEventListener("tap", colidirAlces)
 
 
-    local btnNext = display.newImage(sceneGroup, "assets/proximo.png")
-    btnNext.width = 100
-    btnNext.height = 100
-    btnNext.x = MARGIN + 650
-    btnNext.y = display.contentHeight - MARGIN - (-200)
+--[[     local btnNext = display.newImage(sceneGroup, "assets/proximo.png")
+    btnNext.width, btnNext.height = display.contentWidth * 0.1, display.contentWidth * 0.1
+    btnNext.x = display.contentWidth - MARGIN
+    btnNext.y = display.contentHeight - MARGIN
     btnNext:addEventListener("tap", function(event)
         composer.gotoScene("Page5", { effect = "fade", time = 500 })
-    end)
+    end) ]]
 
     local btnPrev = display.newImage(sceneGroup, "assets/proximo.png")
-    btnPrev.width = 100
-    btnPrev.height = 100
-    btnPrev.x = MARGIN + 50
-    btnPrev.y = display.contentHeight - MARGIN - (-203)
+    btnPrev.width, btnPrev.height = display.contentWidth * 0.1, display.contentWidth * 0.1
+    btnPrev.x = MARGIN
+    btnPrev.y = display.contentHeight - MARGIN
     btnPrev.rotation = 180
     btnPrev:addEventListener("tap", function(event)
         composer.gotoScene("Page2", { effect = "fade", time = 500 })
     end)
 
+--[[     local passInfo = display.newText({
+        text = "Avançar",
+        x = btnNext.x,
+        y = btnNext.y - btnNext.height / 2 - 10,
+        font = native.systemFont,
+        fontSize = 20,
+        align = "center"
+    })
+    passInfo:setFillColor(0)
+    sceneGroup:insert(passInfo) ]]
+
+    local returnInfo = display.newText({
+        text = "Voltar",
+        x = btnPrev.x,
+        y = btnPrev.y - btnPrev.height / 2 - 10,
+        font = native.systemFont,
+        fontSize = 20,
+        align = "center"
+    })
+    returnInfo:setFillColor(0)
+    sceneGroup:insert(returnInfo)
+
     audioButton = display.newImage(sceneGroup, "assets/alto-falante.png") 
     audioButton.width = 80
     audioButton.height = 80
-    audioButton.x = 80
-    audioButton.y = -60
+    audioButton.x = 55
+    audioButton.y = 80
     audioButton:addEventListener("tap", playAudio)
 
     stopButton = display.newImage(sceneGroup, "assets/ferramenta-de-audio-com-alto-falante.png")
-    stopButton.width = 80
-    stopButton.height = 80
-    stopButton.x = 80
-    stopButton.y = -60
+    audioButton.width = 80
+    audioButton.height = 80
+    audioButton.x = 55
+    audioButton.y = 80
     stopButton.isVisible = false
     stopButton:addEventListener("tap", stopAudio)
 end

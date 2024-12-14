@@ -1,7 +1,7 @@
 local composer = require("composer")
 local scene = composer.newScene()
 
-local MARGIN = 50
+local MARGIN = display.contentWidth * 0.065
 
 local audioHandle
 local audioButton, stopButton
@@ -44,10 +44,9 @@ function scene:create(event)
     local title = display.newText({
         text = "Introdução à Evolução",
         x = display.contentCenterX,
-        --[[ y = MARGIN, ]]
-        --[[ width = display.contentHeight - 200, ]]
+        y = MARGIN * 3.5,
         font = native.systemFontBold,
-        fontSize = 50,
+        fontSize = display.contentWidth * 0.07,
         align = "center"
     })
     title:setFillColor(0)
@@ -56,7 +55,7 @@ function scene:create(event)
     local subtitle = display.newText({
         text = "Conceito da Evolução Biológica",
         x = display.contentCenterX,
-        y = title.y + 80,
+        y = title.y + 90,
         width = display.contentWidth - 2 * MARGIN,
         font = native.systemFontBold,
         fontSize = 35,
@@ -68,10 +67,10 @@ function scene:create(event)
     local description = display.newText({
         text = "A evolução biológica é o processo de mudança nas características hereditárias de uma população ao longo de várias gerações. Essas mudanças ocorrem através de variações genéticas, que podem ser benéficas, neutras ou prejudiciais para os organismos em questão. O conceito central da evolução é que todos os seres vivos compartilham um ancestral comum, e, ao longo do tempo, as espécies se modificam em resposta ao ambiente, resultando na diversidade de formas de vida que vemos hoje.\n\nClique no ambiente que você deseja e veja como o ancestral modificou em resposta ao ambiente.",
         x = display.contentCenterX,
-        y = subtitle.y + 260,
+        y = subtitle.y + 200,
         width = display.contentWidth - 3 * MARGIN,
         font = native.systemFont,
-        fontSize = 28,
+        fontSize = 22,
         align = "left"
     })
     description:setFillColor(0)
@@ -137,34 +136,56 @@ function scene:create(event)
     end)
 
     local btnNext = display.newImage(sceneGroup, "assets/proximo.png")
-    btnNext.width, btnNext.height = 100, 100
-    btnNext.x = display.contentWidth - MARGIN - 50
-    btnNext.y = display.contentHeight - MARGIN + 200
+    btnNext.width, btnNext.height = display.contentWidth * 0.1, display.contentWidth * 0.1
+    btnNext.x = display.contentWidth - MARGIN
+    btnNext.y = display.contentHeight - MARGIN
     btnNext:addEventListener("tap", function(event)
         composer.gotoScene("Page2", { effect = "fade", time = 500 })
     end)
 
     local btnPrev = display.newImage(sceneGroup, "assets/proximo.png")
-    btnPrev.width, btnPrev.height = 100, 100
-    btnPrev.x = MARGIN + 50
-    btnPrev.y = display.contentHeight - MARGIN + 200
+    btnPrev.width, btnPrev.height = display.contentWidth * 0.1, display.contentWidth * 0.1
+    btnPrev.x = MARGIN
+    btnPrev.y = display.contentHeight - MARGIN
     btnPrev.rotation = 180
     btnPrev:addEventListener("tap", function(event)
         composer.gotoScene("Capa", { effect = "fade", time = 500 })
     end)
 
+    local passInfo = display.newText({
+        text = "Avançar",
+        x = btnNext.x,
+        y = btnNext.y - btnNext.height / 2 - 10,
+        font = native.systemFont,
+        fontSize = 20,
+        align = "center"
+    })
+    passInfo:setFillColor(0)
+    sceneGroup:insert(passInfo)
+
+    local returnInfo = display.newText({
+        text = "Voltar",
+        x = btnPrev.x,
+        y = btnPrev.y - btnPrev.height / 2 - 10,
+        font = native.systemFont,
+        fontSize = 20,
+        align = "center"
+    })
+    returnInfo:setFillColor(0)
+    sceneGroup:insert(returnInfo)
+
     audioButton = display.newImage(sceneGroup, "assets/alto-falante.png") 
-    audioButton.width = 80
-    audioButton.height = 80
+    audioButton.width = display.contentWidth * 0.1
+    audioButton.height = display.contentWidth * 0.1
     audioButton.x = 80
-    audioButton.y = -60
+    audioButton.y = 80
     audioButton:addEventListener("tap", playAudio)
 
     stopButton = display.newImage(sceneGroup, "assets/ferramenta-de-audio-com-alto-falante.png")
-    stopButton.width = 80
-    stopButton.height = 80
+    stopButton.width = display.contentWidth * 0.1
+    stopButton.height = display.contentWidth * 0.1
     stopButton.x = 80
-    stopButton.y = -60
+    stopButton.y = 80
     stopButton.isVisible = false
     stopButton:addEventListener("tap", stopAudio)
 end

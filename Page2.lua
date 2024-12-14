@@ -7,7 +7,7 @@ local scene = composer.newScene()
 -- the scene is removed entirely (not recycled) via "composer.removeScene()"
 -- -----------------------------------------------------------------------------------
  
-    local MARGIN = 50
+    local MARGIN = display.contentWidth * 0.065
 
     -- variáveis de controle de progresso
     local firstPageVisited = composer.getVariable("firstPageVisited") or false
@@ -20,9 +20,8 @@ local scene = composer.newScene()
 
     -- coordenadas e páginas associadas para cada ponto
     local points = {
-        { x = 331, y = 553, page = "Page3" },
+        { x = 332, y = 550, page = "Page3" },
         { x = 270, y = 508, page = "Page4" },
-        { x = 170, y = 285, page = "Page6" },
         { x = 253, y = 280, page = "Page5" }
     }
 
@@ -80,15 +79,12 @@ local function displayImageBasedOnProgress(sceneGroup)
     elseif thirdPageVisited and not fourthdPageVisited then
         -- darwin
         scientistImage = display.newImageRect(sceneGroup, "assets/Figura_3_Página_2-removebg-preview.png", 600, 600)
-    elseif fourthdPageVisited then
-        scientistImage = display.newImageRect(sceneGroup, "assets/Figura_Página_2-removebg-preview.png", 600, 600)
-        -- ultima
-    --[[ else
+--[[     elseif fourthdPageVisited then
         scientistImage = display.newImageRect(sceneGroup, "assets/Figura_Página_2-removebg-preview.png", 600, 600) ]]
     end
 
     scientistImage.x = display.contentCenterX
-    scientistImage.y = display.contentCenterY + 400
+    scientistImage.y = display.contentCenterY + 220
     updateRedDotsPositions()
     return scientistImage
 end
@@ -115,8 +111,9 @@ function scene:create( event )
     local title = display.newText({
         text = "Introdução à Evolução",
         x = display.contentCenterX,
+        y = MARGIN * 2,
         font = native.systemFontBold,
-        fontSize = 50,
+        fontSize = display.contentWidth * 0.07,
         align = "center"
     })
     title:setFillColor(0)
@@ -135,12 +132,12 @@ function scene:create( event )
     sceneGroup:insert(subtitle)
 
     local description = display.newText({
-        text = "A evolução biológica é um processo demorado, que pode levar milhares ou até milhões de anos para ser observado em grande escala. Além dela não seguir um roteiro, assim como os pokémons seguem, mas existe muitas teorias de como ocorre a evolução na nossa realidade. Segundo uma dessas teorias, todos os organismos apresentam um ancestral comum e todas as espécies hoje existentes são resultados de contínuos processos de mudanças. Admita-se, portanto, que todas as espécies não são fixas e estão em constante modificação. Nisso de que as espécies não são fixas e estão em constante modificação, o mundo Pokémon elabora bem. E para entender melhor, vamos adentrar nas duas teorias mais profundas desta temática.",
+        text = "A evolução biológica é um processo demorado, que pode levar milhares ou até milhões de anos para ser observado em grande escala. Além dela não seguir um roteiro, existe muitas teorias de como ocorre a evolução na nossa realidade. Segundo uma dessas teorias, todos os organismos apresentam um ancestral comum e todas as espécies hoje existentes são resultados de contínuos processos de mudanças. Admita-se, portanto, que todas as espécies não são fixas e estão em constante modificação.\nAbaixo, clique na bolinha vermelha para ir para a página que fala sobre cada teoria da evolução mostrada, indo do ancestral comum até a teoria de darwin",
         x = display.contentCenterX,
-        y = subtitle.y + 300,
+        y = subtitle.y + 180,
         width = display.contentWidth - 3 * MARGIN,
         font = native.systemFont,
-        fontSize = 28,
+        fontSize = 20,
         align = "left"
     })
     description:setFillColor(0)
@@ -173,34 +170,56 @@ function scene:create( event )
     end
 
     local btnNext = display.newImage(sceneGroup, "assets/proximo.png")
-    btnNext.width, btnNext.height = 100, 100
-    btnNext.x = display.contentWidth - MARGIN - 50
-    btnNext.y = display.contentHeight - MARGIN + 200
+    btnNext.width, btnNext.height = display.contentWidth * 0.1, display.contentWidth * 0.1
+    btnNext.x = display.contentWidth - MARGIN
+    btnNext.y = display.contentHeight - MARGIN
     btnNext:addEventListener("tap", function(event)
         composer.gotoScene("Contracapa", { effect = "fade", time = 500 })
     end)
 
     local btnPrev = display.newImage(sceneGroup, "assets/proximo.png")
-    btnPrev.width, btnPrev.height = 100, 100
-    btnPrev.x = MARGIN + 50
-    btnPrev.y = display.contentHeight - MARGIN + 200
+    btnPrev.width, btnPrev.height = display.contentWidth * 0.1, display.contentWidth * 0.1
+    btnPrev.x = MARGIN
+    btnPrev.y = display.contentHeight - MARGIN
     btnPrev.rotation = 180
     btnPrev:addEventListener("tap", function(event)
         composer.gotoScene("Page1", { effect = "fade", time = 500 })
     end)
 
+    local passInfo = display.newText({
+        text = "Avançar",
+        x = btnNext.x,
+        y = btnNext.y - btnNext.height / 2 - 10,
+        font = native.systemFont,
+        fontSize = 20,
+        align = "center"
+    })
+    passInfo:setFillColor(0)
+    sceneGroup:insert(passInfo)
+
+    local returnInfo = display.newText({
+        text = "Voltar",
+        x = btnPrev.x,
+        y = btnPrev.y - btnPrev.height / 2 - 10,
+        font = native.systemFont,
+        fontSize = 20,
+        align = "center"
+    })
+    returnInfo:setFillColor(0)
+    sceneGroup:insert(returnInfo)
+
     audioButton = display.newImage(sceneGroup, "assets/alto-falante.png") 
     audioButton.width = 80
     audioButton.height = 80
-    audioButton.x = 80
-    audioButton.y = -60
+    audioButton.x = 55
+    audioButton.y = 80
     audioButton:addEventListener("tap", playAudio)
 
     stopButton = display.newImage(sceneGroup, "assets/ferramenta-de-audio-com-alto-falante.png")
     stopButton.width = 80
     stopButton.height = 80
-    stopButton.x = 80
-    stopButton.y = -60
+    stopButton.x = 55
+    stopButton.y = 80
     stopButton.isVisible = false
     stopButton:addEventListener("tap", stopAudio)
 end
@@ -222,9 +241,9 @@ function scene:show( event )
         elseif secondPageVisited and not thirdPageVisited then
             thirdPageVisited = true
             composer.setVariable("thirdPageVisited", true)
-        elseif thirdPageVisited and not fourthdPageVisited then
+--[[         elseif thirdPageVisited and not fourthdPageVisited then
             fourthdPageVisited = true
-            composer.setVariable("fourthdPageVisited", true)
+            composer.setVariable("fourthdPageVisited", true) ]]
         end
 
         displayImageBasedOnProgress(sceneGroup)

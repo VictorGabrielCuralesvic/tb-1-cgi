@@ -4,7 +4,7 @@ local scene = composer.newScene()
 local audioHandle
 local audioButton, stopButton
 
-local MARGIN = 50
+local MARGIN = display.contentWidth * 0.065
 
 local function playAudio()
     if not audioHandle then
@@ -54,7 +54,7 @@ function scene:create(event)
     local autor = display.newText({
         text = "Autor: Victor Gabriel Vieira Fechine Tavares\n2024.2",
         x = display.contentCenterX,
-        y = subtitulo.y + 600,
+        y = subtitulo.y + 100,
         font = native.systemFont,
         fontSize = 25,
         align = "center"
@@ -64,21 +64,43 @@ function scene:create(event)
     local btnNext = display.newImage(sceneGroup, "assets/proximo.png")
     btnNext.width = 100
     btnNext.height = 100
-    btnNext.x = MARGIN + 650
-    btnNext.y = display.contentHeight - MARGIN - (-200)
+    btnNext.x = display.contentWidth - MARGIN
+    btnNext.y = display.contentHeight - 100
     btnNext:addEventListener("tap", function(event)
         composer.gotoScene("Page1", { effect = "fade", time = 500 })
     end)
 
-    local btnPrev = display.newImage(sceneGroup, "assets/proximo.png")
+--[[     local btnPrev = display.newImage(sceneGroup, "assets/proximo.png")
     btnPrev.width = 100
     btnPrev.height = 100
-    btnPrev.x = MARGIN + 50
-    btnPrev.y = display.contentHeight - MARGIN - (-203)
+    btnPrev.x = MARGIN
+    btnPrev.y = display.contentHeight - 100
     btnPrev.rotation = 180
     btnPrev:addEventListener("tap", function(event)
         composer.gotoScene("Capa", { effect = "fade", time = 500 })
-    end)
+    end) ]]
+
+    local passInfo = display.newText({
+        text = "Avançar",
+        x = btnNext.x,
+        y = btnNext.y - btnNext.height / 2 - 10,
+        font = native.systemFont,
+        fontSize = 20,
+        align = "center"
+    })
+    passInfo:setFillColor(0)
+    sceneGroup:insert(passInfo)
+
+--[[     local returnInfo = display.newText({
+        text = "Voltar",
+        x = btnPrev.x,
+        y = btnPrev.y - btnPrev.height / 2 - 10,
+        font = native.systemFont,
+        fontSize = 20,
+        align = "center"
+    })
+    returnInfo:setFillColor(0)
+    sceneGroup:insert(returnInfo) ]]
 
     audioButton = display.newImage(sceneGroup, "assets/alto-falante.png") -- Sem "local"
     audioButton.width = 80

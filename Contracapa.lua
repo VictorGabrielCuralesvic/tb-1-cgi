@@ -46,10 +46,10 @@ function scene:create( event )
     local titulo = display.newText({
         text = "ONIS\nVOLVERE\nEVOLUTIO\nEVOLUÇÃO",
         x = display.contentCenterX, 
-        y = display.contentCenterY - 500,
+        y = display.contentCenterY - 300,
         width = display.contentWidth - 100,
         font = native.systemFontBold, 
-        fontSize = 48,
+        fontSize = 70,
         align = "center"
     })
     titulo:setFillColor(0)
@@ -58,7 +58,7 @@ function scene:create( event )
     local subtitulo = display.newText({
         text = "Evidências da evolução e especiação",
         x = display.contentCenterX, 
-        y = titulo.y + 150,
+        y = titulo.y + 200,
         font = native.systemFont, 
         fontSize = 30
     })
@@ -67,7 +67,7 @@ function scene:create( event )
     local info = display.newText({
         text = "Autor: Victor Gabriel Vieira Fechine Tavares\nOrientador: Prof. Ewerton Mendonça\nDisciplina: Computação Gráfica e Sistemas Multimídia\n2024.2",
         x = display.contentCenterX,
-        y = subtitulo.y + 800,
+        y = subtitulo.y + 100,
         font = native.systemFont,
         fontSize = 25,
         align = "center"
@@ -77,10 +77,10 @@ function scene:create( event )
     local referencias = display.newText({
         text = "Referências:\n- A Origem das Espécies (Charles Darwin)\n- A Grande História da Evolução (Richard Dawkins)\n- A Vida Maravilhosa (Stephen Jay Gould)",
         x = display.contentCenterX,
-        y = info.y - 400,
+        y = info.y + 120,
         width = display.contentWidth - 150,
         font = native.systemFont,
-        fontSize = 40,
+        fontSize = 25,
         align = "center"
     })
     referencias:setFillColor(0.2)
@@ -90,16 +90,46 @@ function scene:create( event )
 
     btnNext.width = 100
     btnNext.height = 100
-
-    btnNext.x = MARGIN + 50
-    btnNext.y = display.contentHeight - MARGIN - (-200)
-
-    btnNext.rotation = 180
+    btnNext.x = display.contentWidth - MARGIN
+    btnNext.y = display.contentHeight - 100
 
     btnNext:addEventListener("tap", function(event)
         composer.gotoScene("Capa");
         print("Capa")
     end)
+
+    local btnPrev = display.newImage(sceneGroup, "assets/proximo.png")
+    btnPrev.width = 100
+    btnPrev.height = 100
+    btnPrev.x = MARGIN
+    btnPrev.y = display.contentHeight - 100
+    btnPrev.rotation = 180
+    btnPrev:addEventListener("tap", function(event)
+        composer.gotoScene("Page2", { effect = "fade", time = 500 })
+    end)
+
+    local passInfo = display.newText({
+        text = "Ir para a Capa",
+        x = btnNext.x - 35,
+        y = btnNext.y - btnNext.height / 2 - 10,
+        font = native.systemFont,
+        fontSize = 20,
+        align = "center"
+    })
+    passInfo:setFillColor(0)
+    sceneGroup:insert(passInfo)
+
+    local returnInfo = display.newText({
+        text = "Voltar",
+        x = btnPrev.x,
+        y = btnPrev.y - btnPrev.height / 2 - 10,
+        font = native.systemFont,
+        fontSize = 20,
+        align = "center"
+    })
+    returnInfo:setFillColor(0)
+    sceneGroup:insert(returnInfo)
+
 
     audioButton = display.newImage(sceneGroup, "assets/alto-falante.png") -- Sem "local"
     audioButton.width = 80

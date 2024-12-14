@@ -1,7 +1,7 @@
 local composer = require("composer")
 local scene = composer.newScene()
 
-local MARGIN = 50
+local MARGIN = display.contentWidth * 0.065
 
 local audioHandle
 local audioButton, stopButton
@@ -53,50 +53,70 @@ function scene:create(event)
 
     -- Descrição
     local description = display.newText({
-        text = "O Lamarckismo, a teoria de Lamarck, baseava-se em dois pontos principais: a transmissão dos caracteres adquiridos e a lei do uso e desuso. Segundo esse naturalista, estruturas utilizadas com frequência desenvolvem-se e aquelas que não são utilizadas atrofiam-se, ou seja, se você não utiliza-se seus dentes, Lamarck acreditava que seus dentes iriam diminuir e, por conta disso, seus descendentes iriam não possuir dentes ou ter dentes pequenos. Estranho, não? O que acha?\n      Na natureza que conhecemos, Lamarck ainda utilizou das girafas para explicar sua hipótese de forma mais concreta. De acordo com as ideias propostas por Lamarck, o pescoço da girafa tornou-se comprido em decorrência da necessidade de se alcançarem folhas nos ramos mais altos.\nDe acordo com as ideias desse biólogo, as girafas esticavam seus pescoços a fim de conseguirem alimento, fazendo com que essa parte do corpo ficasse cada vez mais forte e maior, isso sendo a lei do uso e desuso. Essas mudanças, segundo o lamarckismo, eram passadas aos descendentes, isso sendo a transmissão dos caracteres adquiridos. Assim, fazendo com que os descendentes apresentassem, ao longo do tempo, pescoços cada vez maiores, uma vez que continuavam a se esforçar, e essas mudanças continuavam a ser transmitidas.\n Toque na cabeça e estique o pescoço da girafa para ela chegar ao topo, assim como Lamarck ensinou.",
+        text = "O Lamarckismo, a teoria de Lamarck, baseava-se em dois pontos principais: a transmissão dos caracteres adquiridos e a lei do uso e desuso. Segundo esse naturalista, estruturas utilizadas com frequência desenvolvem-se e aquelas que não são utilizadas atrofiam-se. De acordo com as ideias propostas por Lamarck, o pescoço da girafa tornou-se comprido em decorrência da necessidade de se alcançarem folhas nos ramos mais altos.\nDe acordo com as ideias desse biólogo, as girafas esticavam seus pescoços a fim de conseguirem alimento, fazendo com que essa parte do corpo ficasse cada vez mais forte e maior. Essas mudanças, segundo o lamarckismo, eram passadas aos descendentes. Assim, fazendo com que os descendentes apresentassem, ao longo do tempo, pescoços cada vez maiores, uma vez que continuavam a se esforçar, e essas mudanças continuavam a ser transmitidas.\n Toque na cabeça e arraste o pescoço da girafa para ela chegar ao topo, assim como Lamarck disse que elas evoluiram.",
         x = display.contentCenterX,
         y = title.y + 280,
         width = display.contentWidth - 3 * MARGIN,
         font = native.systemFont,
-        fontSize = 18,
+        fontSize = 22,
         align = "left"
     })
     description:setFillColor(0)
     sceneGroup:insert(description)
 
-    local btnNext = display.newImage(sceneGroup, "assets/proximo.png")
-    btnNext.width = 100
-    btnNext.height = 100
-    btnNext.x = MARGIN + 650
-    btnNext.y = display.contentHeight - MARGIN - (-200)
+--[[     local btnNext = display.newImage(sceneGroup, "assets/proximo.png")
+    btnNext.width, btnNext.height = display.contentWidth * 0.1, display.contentWidth * 0.1
+    btnNext.x = display.contentWidth - MARGIN
+    btnNext.y = display.contentHeight - MARGIN
     btnNext:addEventListener("tap", function(event)
         composer.gotoScene("Page5", { effect = "fade", time = 500 })
         print("Page5")
-    end)
+    end) ]]
 
     local btnPrev = display.newImage(sceneGroup, "assets/proximo.png")
-    btnPrev.width = 100
-    btnPrev.height = 100
-    btnPrev.x = MARGIN + 50
-    btnPrev.y = display.contentHeight - MARGIN - (-203)
+    btnPrev.width, btnPrev.height = display.contentWidth * 0.1, display.contentWidth * 0.1
+    btnPrev.x = MARGIN
+    btnPrev.y = display.contentHeight - MARGIN
     btnPrev.rotation = 180
     btnPrev:addEventListener("tap", function(event)
         composer.gotoScene("Page2", { effect = "fade", time = 500 })
         print("Page3")
     end)
 
+--[[     local passInfo = display.newText({
+        text = "Avançar",
+        x = btnNext.x,
+        y = btnNext.y - btnNext.height / 2 - 10,
+        font = native.systemFont,
+        fontSize = 20,
+        align = "center"
+    })
+    passInfo:setFillColor(0)
+    sceneGroup:insert(passInfo) ]]
+
+    local returnInfo = display.newText({
+        text = "Voltar",
+        x = btnPrev.x,
+        y = btnPrev.y - btnPrev.height / 2 - 10,
+        font = native.systemFont,
+        fontSize = 20,
+        align = "center"
+    })
+    returnInfo:setFillColor(0)
+    sceneGroup:insert(returnInfo)
+
     audioButton = display.newImage(sceneGroup, "assets/alto-falante.png") 
     audioButton.width = 80
     audioButton.height = 80
-    audioButton.x = 80
-    audioButton.y = -60
+    audioButton.x = 55
+    audioButton.y = 80
     audioButton:addEventListener("tap", playAudio)
 
     stopButton = display.newImage(sceneGroup, "assets/ferramenta-de-audio-com-alto-falante.png")
-    stopButton.width = 80
-    stopButton.height = 80
-    stopButton.x = 80
-    stopButton.y = -60
+    audioButton.width = 80
+    audioButton.height = 80
+    audioButton.x = 55
+    audioButton.y = 80
     stopButton.isVisible = false
     stopButton:addEventListener("tap", stopAudio)
 
@@ -119,8 +139,10 @@ function scene:create(event)
     giraffeNeck.width = 100
     giraffeNeck.height = 100
 
+    local MAX_HEIGHT = 150
+    local MIN_HEIGHT = giraffeNeck.height
 
-    -- funcção de arrastar à girafa
+
     function giraffeNeck:touch(event)
         if event.phase == "began" then
             display.getCurrentStage():setFocus(self)
@@ -129,10 +151,11 @@ function scene:create(event)
         elseif self.isFocus then
             if event.phase == "moved" then
                 local deltaY = event.y - event.yStart
-                local newY = self.startY + deltaY
-                if newY > self.startY - 100 and newY < self.startY then
-                    self.y = newY
-                    self.height = self.height + (self.startY - newY) / 10
+                local newHeight = giraffeNeck.height - deltaY / 10
+
+                if newHeight >= MIN_HEIGHT and newHeight <= MAX_HEIGHT then
+                    giraffeNeck.height = newHeight
+                    self.y = giraffeBody.y - giraffeBody.height / 2 - giraffeNeck.height / 2
                 end
             elseif event.phase == "ended" or event.phase == "cancelled" then
                 display.getCurrentStage():setFocus(nil)
@@ -142,6 +165,7 @@ function scene:create(event)
         return true
     end
     giraffeNeck:addEventListener("touch", giraffeNeck)
+
 
 
     local tree = display.newImage(sceneGroup, "assets/arvore (1).png")
